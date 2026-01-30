@@ -15,6 +15,11 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
     (response) => response, // Success
     (error: AxiosError) => {
+        const requestUrl = error.config?.url;
+        // Stopping the refresh if on the front
+        if (requestUrl && (requestUrl.includes('/login') || requestUrl.includes('/register'))) {
+            return Promise.reject(error);
+        }
         // If user is no longer with us...
         if (error.response && (error.response.status === 401 || error.response.status === 403)) {
             localStorage.clear();
