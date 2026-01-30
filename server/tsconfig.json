@@ -1,40 +1,42 @@
 {
-  // Visit https://aka.ms/tsconfig to read more about this file
-  "compilerOptions": {
-    // File Layout
-    "rootDir": "./src",
-    "outDir": "./dist",
+    // Visit https://aka.ms/tsconfig to read more about this file
+    "compilerOptions": {
+        // File Layout
+        "rootDir": "./src",
+        "outDir": "./dist",
 
-    // Environment Settings - Node.js
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "target": "ES2020",
-    "lib": ["ES2020"],
-    "types": ["node"],
+        // Environment Settings - Node.js
+        "module": "ESNext",
+        "moduleResolution": "node",
+        "target": "ES2024",
+        "lib": ["ES2024"],
+        "types": ["node"],
 
-    // Module Interoperability
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
+        // Module Interoperability
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
 
-    // Other Outputs
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
+        // Other Outputs
+        "sourceMap": true,
+        "declaration": false,
+        "declarationMap": false,
 
-    // Stricter Typechecking Options
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
+        // Stricter Typechecking Options
+        "noUncheckedIndexedAccess": true,
+        "exactOptionalPropertyTypes": true,
 
-    // Style Options
-    "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
+        // Style Options
+        "noImplicitReturns": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true,
+        "forceConsistentCasingInFileNames": true,
 
-    // Recommended Options
-    "strict": true,
-    "verbatimModuleSyntax": true,
-    "isolatedModules": true,
-    "skipLibCheck": true
-  }
+        // Recommended Options
+        "strict": true,
+        "verbatimModuleSyntax": true,
+        "isolatedModules": true,
+        "skipLibCheck": true
+    },
+    "include": ["src/**/*"]
 }

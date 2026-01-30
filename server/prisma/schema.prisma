@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  // url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int      @id @default(autoincrement())
+  name           String
+  email          String   @unique
+  password       String   
+  lastLogin      DateTime @default(now()) @map("last_login")
+  registrationTime DateTime @default(now()) @map("registration_time")
+  status         UserStatus @default(ACTIVE)
+
+  @@map("users")
+}
+
+enum UserStatus {
+  ACTIVE
+  BLOCKED
+}
