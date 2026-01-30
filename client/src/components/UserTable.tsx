@@ -94,18 +94,18 @@ export default function UserTable() {
             return;
         }
 
-        // Confirmation for destructive actions
-        if (action === 'delete') {
-            const confirmed = window.confirm(
-                `Are you sure you want to delete ${String(selectedIds.length)} user(s)? This action cannot be undone.`,
-            );
-            if (!confirmed) return;
-        } else if (action === 'delete-unverified') {
-            const confirmed = window.confirm(
-                'Are you sure you want to delete ALL unverified users? This action cannot be undone.',
-            );
-            if (!confirmed) return;
-        }
+        // Confirmation for destructive actions (decided to keep here but disabled to adhere to the task requirements)
+        // if (action === 'delete') {
+        //     const confirmed = window.confirm(
+        //         `Are you sure you want to delete ${String(selectedIds.length)} user(s)? This action cannot be undone.`,
+        //     );
+        //     if (!confirmed) return;
+        // } else if (action === 'delete-unverified') {
+        //     const confirmed = window.confirm(
+        //         'Are you sure you want to delete ALL unverified users? This action cannot be undone.',
+        //     );
+        //     if (!confirmed) return;
+        // }
 
         try {
             let message = '';
