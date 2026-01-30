@@ -47,65 +47,75 @@ export default function AuthPage() {
 
     return (
         <div className="container d-flex justify-content-center align-items-center vh-100">
-            <div className="card shadow p-4" style={{ width: '400px' }}>
-                <h2 className="text-center mb-4">{isLogin ? 'Login' : 'Sign Up'}</h2>
+            <div
+                className="card shadow-lg border-0 rounded-4"
+                style={{ width: '400px', maxWidth: '90%' }}
+            >
+                <div className="card-body p-5">
+                    <h2 className="text-center mb-4 fw-bold text-primary">
+                        {isLogin ? 'Welcome Back' : 'Register'}
+                    </h2>
 
-                {error && <div className="alert alert-danger">{error}</div>}
+                    {error && <div className="alert alert-danger py-2">{error}</div>}
 
-                <form onSubmit={(e) => void handleSubmit(e)}>
-                    {!isLogin && (
-                        <div className="mb-3">
-                            <label className="form-label">Name</label>
+                    <form onSubmit={(e) => void handleSubmit(e)}>
+                        {!isLogin && (
+                            <div className="form-floating mb-3">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    required
+                                    value={formData.name}
+                                    onChange={(e) => {
+                                        setFormData({ ...formData, name: e.target.value });
+                                    }}
+                                />
+                                <label htmlFor="floatingName">Full Name</label>
+                            </div>
+                        )}
+                        <div className="form-floating mb-3">
                             <input
-                                type="text"
+                                type="email"
                                 className="form-control"
                                 required
-                                value={formData.name}
+                                value={formData.email}
                                 onChange={(e) => {
-                                    setFormData({ ...formData, name: e.target.value });
+                                    setFormData({ ...formData, email: e.target.value });
                                 }}
                             />
+                            <label htmlFor="floatingEmail">Email address</label>
                         </div>
-                    )}
-                    <div className="mb-3">
-                        <label className="form-label">Email</label>
-                        <input
-                            type="email"
-                            className="form-control"
-                            required
-                            value={formData.email}
-                            onChange={(e) => {
-                                setFormData({ ...formData, email: e.target.value });
-                            }}
-                        />
-                    </div>
-                    <div className="mb-3">
-                        <label className="form-label">Password</label>
-                        <input
-                            type="password"
-                            className="form-control"
-                            required
-                            value={formData.password}
-                            onChange={(e) => {
-                                setFormData({ ...formData, password: e.target.value });
-                            }}
-                        />
-                    </div>
-                    <button type="submit" className="btn btn-primary w-100">
-                        {isLogin ? 'Login' : 'Register'}
-                    </button>
-                </form>
+                        <div className="form-floating mb-4">
+                            <input
+                                type="password"
+                                className="form-control"
+                                required
+                                value={formData.password}
+                                onChange={(e) => {
+                                    setFormData({ ...formData, password: e.target.value });
+                                }}
+                            />
+                            <label htmlFor="floatingPassword">Password</label>
+                        </div>
+                        <button type="submit" className="btn btn-primary w-100 btn-lg rounded-3">
+                            {isLogin ? 'Login' : 'Register'}
+                        </button>
+                    </form>
 
-                <div className="text-center mt-3">
-                    <button
-                        type="button"
-                        className="btn btn-link"
-                        onClick={() => {
-                            setIsLogin(!isLogin);
-                        }}
-                    >
-                        {isLogin ? 'Need an account? Register' : 'Have an account? Login'}
-                    </button>
+                    <div className="text-center mt-4">
+                        <span className="text-muted small">
+                            {isLogin ? "Don't have an account? " : 'Already have an account? '}
+                        </span>
+                        <button
+                            type="button"
+                            className="btn btn-link p-0 text-decoration-none fw-bold"
+                            onClick={() => {
+                                setIsLogin(!isLogin);
+                            }}
+                        >
+                            {isLogin ? 'Need an account? Register' : 'Have an account? Login'}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
