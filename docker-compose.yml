@@ -1,0 +1,31 @@
+services:
+    # Front
+    client:
+        build: ./client
+        restart: always
+        ports:
+            - '8080:80'
+        depends_on:
+            - server
+
+    # Back
+    server:
+        build: ./server
+        restart: always
+        ports:
+            - '3000:3000'
+        environment:
+            - PORT=3000
+
+    # BD
+    db:
+        image: postgres:18-alpine
+        restart: always
+        environment:
+            POSTGRES_USER: tasker4
+            POSTGRES_PASSWORD: aAgresAa
+            POSTGRES_DB: task4db
+        volumes:
+            - ./postgres_data:/var/lib/postgresql/data
+        ports:
+            - '5432:5432'
