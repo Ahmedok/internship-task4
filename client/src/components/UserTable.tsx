@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import type { AxiosError } from 'axios';
 import api from '../api';
-import { FaTrash, FaLock, FaUnlock, FaSignOutAlt } from 'react-icons/fa';
+import { FaTrash, FaLock, FaUnlock, FaSignOutAlt, FaUserTimes } from 'react-icons/fa';
 
 // Logout logic
 const logout = () => {
@@ -65,13 +65,17 @@ export default function UserTable() {
         }
     };
 
-    // Actions (Block / Unblock / Delete)
-    const handleAction = async (action: 'block' | 'unblock' | 'delete'): Promise<void> => {
-        if (selectedIds.length === 0) return;
+    // Actions (Block / Unblock / Delete / Delete unverified)
+    const handleAction = async (action: 'block' | 'unblock' | 'delete' | 'delete-unverified') => {
+        if (action !== 'delete-unverified' && selectedIds.length === 0) return;
 
         try {
             if (action === 'delete') {
+                // Delete chosen
                 await api.delete('/users/delete', { data: { userIds: selectedIds } });
+            } else if (action === 'delete-unverified') {
+                // Delete all unverified
+                await api.delete('/users/delete-unverified');
             } else {
                 await api.post(`/users/${action}`, { userIds: selectedIds });
             }
@@ -81,6 +85,7 @@ export default function UserTable() {
         } catch (err) {
             const axiosError = err as AxiosError<ErrorResponse>;
             console.error(`Failed to ${action} users:`, axiosError.response?.data.message);
+
             if (axiosError.response?.status === 401 || axiosError.response?.status === 403) {
                 logout();
             }
@@ -107,6 +112,12 @@ export default function UserTable() {
                 </button>
                 <button className="btn btn-secondary" onClick={() => void handleAction('delete')}>
                     <FaTrash /> Delete
+                </button>
+                <button
+                    className="btn btn-warning d-flex align-items-center"
+                    onClick={() => void handleAction('delete-unverified')}
+                >
+                    <FaUserTimes /> Delete Unverified
                 </button>
             </div>
 

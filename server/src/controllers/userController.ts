@@ -61,3 +61,15 @@ export const deleteUsers = async (req: AuthRequest, res: Response) => {
         res.status(500).json({ message: 'Error deleting users' });
     }
 };
+
+// To delete all unverified
+export const deleteUnverified = async (_: AuthRequest, res: Response) => {
+    try {
+        await prisma.user.deleteMany({
+            where: { status: 'UNVERIFIED' },
+        });
+        res.json({ message: 'Unverified users deleted' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error deleting unverified' });
+    }
+};

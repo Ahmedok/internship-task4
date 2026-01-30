@@ -10,12 +10,13 @@ datasource db {
 
 model User {
   id             Int      @id @default(autoincrement())
-  name           String
+  name           String   @default("Anonymous")
   email          String   @unique
   password       String   
   lastLogin      DateTime @default(now()) @map("last_login")
   registrationTime DateTime @default(now()) @map("registration_time")
-  status         UserStatus @default(ACTIVE)
+  status         UserStatus @default(UNVERIFIED)
+  verificationToken String?
 
   @@map("users")
 }
@@ -23,4 +24,5 @@ model User {
 enum UserStatus {
   ACTIVE
   BLOCKED
+  UNVERIFIED
 }

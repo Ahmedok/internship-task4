@@ -2,6 +2,8 @@ import type { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import prisma from '../db.js';
+import crypto from 'crypto';
+import { sendVerificationEmail } from '../utils/emailService.js';
 
 const SECRET_KEY = process.env.JWT_SECRET || 'secret_key_fallback';
 
@@ -30,6 +32,10 @@ export const register = async (req: Request, res: Response): Promise<void> => {
         console.log('[REG] Hashing password...');
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        // Email token
+        console.log('[REG] Generating verification token...');
+        const verificationToken = crypto.randomBytes(32).toString('hex');
+
         // BD insertion
         console.log('[REG] Creating user in DB...');
         const user = await prisma.user.create({
@@ -37,9 +43,14 @@ export const register = async (req: Request, res: Response): Promise<void> => {
                 name: name || 'Anonymous',
                 email,
                 password: hashedPassword,
-                status: 'ACTIVE',
+                status: 'UNVERIFIED',
+                verificationToken,
             },
         });
+
+        // Email send
+        console.log('[REG] Verification letter sent to:', email);
+        sendVerificationEmail(email, verificationToken);
 
         // Token
         console.log('[REG] Success! User ID:', user.id);
@@ -47,10 +58,48 @@ export const register = async (req: Request, res: Response): Promise<void> => {
             expiresIn: '24h',
         });
 
-        res.json({ token, user: { id: user.id, name: user.name, email: user.email } });
+        res.json({
+            token,
+            user: { id: user.id, name: user.name, email: user.email, status: user.status },
+            message: 'Registered! Please check the mail!',
+        });
     } catch (error) {
         console.error('[REG] FATAL ERROR:', error);
         res.status(500).json({ message: 'Registration failed' });
+    }
+};
+
+// Email verification
+export const verifyEmail = async (req: Request, res: Response): Promise<void> => {
+    const { token } = req.params;
+
+    if (!token || typeof token !== 'string') {
+        res.status(400).send('Invalid token format');
+        return;
+    }
+
+    try {
+        // User search
+        const user = await prisma.user.findFirst({ where: { verificationToken: token } });
+
+        if (!user) {
+            res.status(400).send('Invalid token');
+            return;
+        }
+
+        // Status update
+        await prisma.user.update({
+            where: { id: user.id },
+            data: {
+                status: 'ACTIVE',
+                verificationToken: null,
+            },
+        });
+
+        // Redirect to front
+        res.redirect('http://localhost:5173/');
+    } catch (error) {
+        res.status(500).send('Verification failed');
     }
 };
 
