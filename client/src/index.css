@@ -1,0 +1,90 @@
+:root {
+    /* --- Color Palette (Slate / Corporate) --- */
+    --bs-primary: #334155; /* Slate 700 - main corporate color */
+    --bs-primary-rgb: 51, 65, 85;
+
+    --bs-success: #10b981; /* Emerald 500 - soft success */
+    --bs-danger: #f43f5e; /* Rose 500 - soft error */
+    --bs-warning: #f59e0b; /* Amber 500 - warning */
+
+    --bs-body-bg: #f1f5f9; /* Slate 100 - base background */
+}
+
+/* --- Mesh Gradient Background --- */
+body {
+    font-family:
+        'Inter',
+        system-ui,
+        -apple-system,
+        sans-serif;
+    min-height: 100vh;
+
+    /* Complex gradient creating depth without being distracting */
+    background-color: #e2e8f0;
+    background-image:
+        radial-gradient(at 0% 0%, rgba(51, 65, 85, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.1) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(244, 63, 94, 0.05) 0px, transparent 50%);
+    background-attachment: fixed; /* Background stays fixed on scroll */
+}
+
+/* --- UI Polish --- */
+
+/* Cards with subtle glassmorphism effect */
+.card {
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.95); /* Almost white with slight transparency */
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Removed default Bootstrap shadow, added custom soft shadow */
+.btn {
+    border-radius: 6px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+/* Focus states for accessibility (probably not needed, but why not?) */
+.btn:focus,
+.form-control:focus,
+.form-check-input:focus {
+    outline: 2px solid var(--bs-primary);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 0.2rem rgba(51, 65, 85, 0.25);
+}
+
+/* Table: made rows more spacious */
+.table td,
+.table th {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+/* Table hover effect */
+.table-hover tbody tr:hover {
+    background-color: rgba(51, 65, 85, 0.05);
+}
+
+/* Checkboxes: made them larger and more noticeable */
+.form-check-input {
+    width: 1.2em;
+    height: 1.2em;
+    margin-top: 0.2em;
+    cursor: pointer;
+    border: 2px solid #cbd5e1;
+}
+
+.form-check-input:checked {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+}
+
+.form-check-input:hover:not(:disabled) {
+    border-color: var(--bs-primary);
+}
+
+/* Loading spinner color override */
+.spinner-border {
+    border-color: currentColor;
+    border-right-color: transparent;
+}

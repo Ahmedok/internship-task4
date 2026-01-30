@@ -157,9 +157,12 @@ export default function UserTable() {
     };
 
     return (
-        <div className="d-flex flex-column min-vh-100 bg-light">
+        <div className="d-flex flex-column min-vh-100">
             {/* 1. Navbar */}
-            <nav className="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm mb-4">
+            <nav
+                className="navbar navbar-expand-lg navbar-dark mb-4"
+                style={{ background: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)' }}
+            >
                 <div className="container">
                     <span className="navbar-brand fw-bold fs-4">
                         <FaShield /> AdminPanel{' '}
