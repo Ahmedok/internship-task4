@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import prisma from '../db.js';
 
-const SECRET_KEY = process.env.JWT_SECRET || 'secret_key_change_me';
+const SECRET_KEY = process.env.JWT_SECRET || 'secret_key_fallback';
 
 // Registration
 export const register = async (req: Request, res: Response): Promise<void> => {
