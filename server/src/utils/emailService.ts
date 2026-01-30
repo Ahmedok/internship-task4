@@ -3,13 +3,15 @@ import nodemailer from 'nodemailer';
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: process.env.EMAIL_USER, // Твой email (добавим в .env)
-        pass: process.env.EMAIL_PASS, // Пароль приложения (не от аккаунта!)
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
     },
 });
 
 export const sendVerificationEmail = async (email: string, token: string) => {
-    const verificationLink = `http://localhost:3000/api/auth/verify/${token}`; // Ссылка на наш бэкенд
+    // Use APP_URL from .env, default to localhost for dev
+    const appUrl = process.env.APP_URL || 'http://localhost:3000';
+    const verificationLink = `${appUrl}/api/auth/verify/${token}`;
 
     try {
         await transporter.sendMail({
@@ -29,7 +31,7 @@ export const sendVerificationEmail = async (email: string, token: string) => {
                 </div>
     `,
         });
-        console.log(`Verification email sent to ${email}`);
+        console.log(`Verification email sent to ${email} from ${appUrl}`);
         console.log(`For dev purposes, this is the link: ${verificationLink}`);
     } catch (error) {
         console.error('Email sending failed (probably spam filter)', error);
