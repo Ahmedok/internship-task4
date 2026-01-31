@@ -11,7 +11,7 @@ import {
     FaSyncAlt,
     FaBug,
 } from 'react-icons/fa';
-import { FaShield } from 'react-icons/fa6';
+import { FaShield, FaMagnifyingGlass, FaXmark } from 'react-icons/fa6';
 import { toast } from 'react-toastify';
 
 interface User {
@@ -307,9 +307,12 @@ export default function UserTable() {
                             </small>
                             <div className="w-100 ms-md-auto" style={{ maxWidth: '300px' }}>
                                 <div className="input-group input-group-sm">
+                                    <span className="input-group-text bg-white border-end-0">
+                                        <FaMagnifyingGlass className="text-muted" />
+                                    </span>
                                     <input
                                         type="text"
-                                        className="form-control"
+                                        className="form-control border-start-0"
                                         placeholder="Search by name, email, status, or ID..."
                                         value={filterText}
                                         onChange={(e) => {
@@ -327,7 +330,7 @@ export default function UserTable() {
                                             }}
                                             aria-label="Clear filter"
                                         >
-                                            ×
+                                            <FaXmark />
                                         </button>
                                     )}
                                 </div>
@@ -359,11 +362,31 @@ export default function UserTable() {
                                             aria-label="Select all users"
                                         />
                                     </th>
-                                    <th scope="col">ID</th>
-                                    <th scope="col">User Info</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Last Login</th>
-                                    <th scope="col" className="text-nowrap pe-4">
+                                    <th scope="col" style={{ width: '60px' }}>
+                                        ID
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        className="text-nowrap"
+                                        style={{ minWidth: '100px' }}
+                                    >
+                                        User Info
+                                    </th>
+                                    <th scope="col" style={{ width: '110px' }}>
+                                        Status
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        className="text-nowrap"
+                                        style={{ width: '150px' }}
+                                    >
+                                        Last Login
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        style={{ width: '110px' }}
+                                        className="text-nowrap pe-4"
+                                    >
                                         Registered
                                     </th>
                                 </tr>
@@ -393,8 +416,18 @@ export default function UserTable() {
 
                                         {/* Name + Mail */}
                                         <td>
-                                            <div className="fw-bold text-dark">{user.name}</div>
-                                            <div className="small text-muted">{user.email}</div>
+                                            <div
+                                                className="text-truncate fw-bold text-dark"
+                                                title={user.name}
+                                            >
+                                                {user.name}
+                                            </div>
+                                            <div
+                                                className="text-truncate small text-muted"
+                                                title={user.email}
+                                            >
+                                                {user.email}
+                                            </div>
                                         </td>
 
                                         <td>
@@ -453,7 +486,9 @@ export default function UserTable() {
                                             colSpan={6}
                                             className="text-center py-5 text-muted bg-light"
                                         >
-                                            <div className="fs-4 mb-2">🔍</div>
+                                            <div className="fs-4 mb-2">
+                                                <FaMagnifyingGlass />
+                                            </div>
                                             No users match your search
                                             <div className="mt-2">
                                                 <button
