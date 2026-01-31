@@ -3,6 +3,7 @@ import AuthPage from './components/AuthPage.tsx';
 import UserTable from './components/UserTable.tsx';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import NotFoundPage from './components/NotFoundPage.tsx';
 
 function App() {
     const isAuthenticated = !!localStorage.getItem('token');
@@ -20,6 +21,7 @@ function App() {
                     path="/"
                     element={isAuthenticated ? <UserTable /> : <Navigate to="/login" />}
                 />
+                <Route path="*" element={<NotFoundPage />} />
             </Routes>
         </BrowserRouter>
     );
