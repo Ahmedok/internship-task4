@@ -158,7 +158,7 @@ export default function UserTable() {
 
     return (
         <div className="d-flex flex-column min-vh-100">
-            {/* 1. Navbar */}
+            {/* Navbar */}
             <nav
                 className="navbar navbar-expand-lg navbar-dark mb-4"
                 style={{ background: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)' }}
@@ -186,11 +186,15 @@ export default function UserTable() {
             </nav>
 
             <div className="container flex-grow-1">
-                {/* 2. Toolbar left */}
+                {/* Toolbar */}
                 <div className="card shadow-sm border-0 mb-4 rounded-3">
                     <div className="card-body d-flex justify-content-between align-items-center flex-wrap gap-3">
                         {/* Action group */}
-                        <div className="btn-group shadow-sm" role="group" aria-label="User actions">
+                        <div
+                            className="btn-group shadow-sm"
+                            role="group"
+                            aria-label="User actions (left)"
+                        >
                             <button
                                 className="btn btn-danger"
                                 onClick={() => void handleAction('block')}
@@ -198,7 +202,8 @@ export default function UserTable() {
                                 title="Block selected users"
                                 aria-label="Block selected users"
                             >
-                                <FaLock className="me-2" /> Block
+                                <FaLock className="me-2" />{' '}
+                                <span className="d-none d-sm-inline">Block</span>
                             </button>
                             <button
                                 className="btn btn-success"
@@ -217,22 +222,27 @@ export default function UserTable() {
                                 title="Delete selected users"
                                 aria-label="Delete selected users"
                             >
-                                <FaTrash />
+                                <FaTrash className="me-2" />{' '}
+                                <span className="d-none d-sm-inline">Delete</span>
                             </button>
                         </div>
 
                         {/* Toolbar right */}
-                        <div className="d-flex gap-2 align-items-center">
+                        <div
+                            className="btn-group d-flex gap-2"
+                            role="group"
+                            aria-label="User actions (right)"
+                        >
                             {/* Remove unverified */}
                             <button
-                                className="btn btn-outline-warning text-dark border-warning d-flex align-items-center"
+                                className="btn btn-outline-warning text-dark border-warning"
                                 onClick={() => void handleAction('delete-unverified')}
                                 disabled={loading}
                                 title="Remove all unverified users"
                                 aria-label="Remove all unverified users"
                             >
                                 <FaUserTimes className="me-2" />{' '}
-                                <span className="d-none d-md-inline small fw-bold">
+                                <span className="d-none d-md-inline fw-bold">
                                     Remove Unverified
                                 </span>
                             </button>
@@ -277,7 +287,7 @@ export default function UserTable() {
                                 className="table-light text-secondary text-uppercase small"
                                 style={{ letterSpacing: '0.5px' }}
                             >
-                                <tr>
+                                <tr className="align-items-middle">
                                     <th scope="col" className="ps-4" style={{ width: '50px' }}>
                                         <input
                                             type="checkbox"
@@ -305,7 +315,7 @@ export default function UserTable() {
                                 {users.map((user) => (
                                     <tr
                                         key={user.id}
-                                        className={user.status === 'BLOCKED' ? 'table-danger' : ''}
+                                        className={`align-items-middle ${user.status === 'BLOCKED' ? 'table-danger' : ''}`}
                                     >
                                         <td className="ps-4">
                                             <input
@@ -320,7 +330,9 @@ export default function UserTable() {
                                                 aria-label={`Select user ${user.name}`}
                                             />
                                         </td>
-                                        <td className="text-muted fw-light">#{user.id}</td>
+                                        <td className="text-muted fw-light">
+                                            <span>#{user.id}</span>
+                                        </td>
 
                                         {/* Name + Mail */}
                                         <td>

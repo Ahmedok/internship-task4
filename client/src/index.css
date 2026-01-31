@@ -88,3 +88,10 @@ body {
     border-color: currentColor;
     border-right-color: transparent;
 }
+
+@keyframes noop {
+}
+
+.noop {
+    animation: noop 0s;
+}

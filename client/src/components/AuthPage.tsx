@@ -180,7 +180,7 @@ export default function AuthPage() {
                         </button>
                     </form>
 
-                    <div className="text-center mt-4">
+                    <div className="text-center mt-4 d-flex flex-column justify-content-center align-items-center gap-1">
                         <span className="text-muted small">
                             {isLogin ? "Don't have an account? " : 'Already have an account? '}
                         </span>
