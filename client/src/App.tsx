@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import AuthPage from './components/AuthPage.tsx';
 import UserTable from './components/UserTable.tsx';
 import { ToastContainer, cssTransition } from 'react-toastify';
@@ -13,9 +13,29 @@ const DisabledTransition = cssTransition({
     collapseDuration: 0,
 });
 
-function App() {
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+    const isAuthenticated = !!localStorage.getItem('token');
+    const location = useLocation();
+
+    if (!isAuthenticated) {
+        // Preserve params when redirecting to login
+        return <Navigate to={`/login${location.search}`} replace />;
+    }
+
+    return <>{children}</>;
+}
+
+function AuthRoute({ children }: { children: React.ReactNode }) {
     const isAuthenticated = !!localStorage.getItem('token');
 
+    if (isAuthenticated) {
+        return <Navigate to="/" replace />;
+    }
+
+    return <>{children}</>;
+}
+
+function App() {
     return (
         <BrowserRouter>
             <ToastContainer
@@ -34,11 +54,19 @@ function App() {
             <Routes>
                 <Route
                     path="/login"
-                    element={!isAuthenticated ? <AuthPage /> : <Navigate to="/" />}
+                    element={
+                        <AuthRoute>
+                            <AuthPage />
+                        </AuthRoute>
+                    }
                 />
                 <Route
                     path="/"
-                    element={isAuthenticated ? <UserTable /> : <Navigate to="/login" />}
+                    element={
+                        <ProtectedRoute>
+                            <UserTable />
+                        </ProtectedRoute>
+                    }
                 />
                 <Route path="*" element={<NotFoundPage />} />
             </Routes>

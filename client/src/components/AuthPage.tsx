@@ -32,17 +32,36 @@ export default function AuthPage() {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+        // Check sessionStorage for client messages (interceptor)
         const wasBlocked = sessionStorage.getItem('userBlocked');
 
         if (wasBlocked === 'true') {
-            // Delay to ensure the container is ready
             setTimeout(() => {
                 toast.error(
                     'The account has been blocked or your session expired. Please login again.',
                 );
             }, 100);
-
             sessionStorage.removeItem('userBlocked');
+        }
+
+        // Check URL parameters for backend messages (email verification)
+        const params = new URLSearchParams(window.location.search);
+        const status = params.get('status');
+
+        if (status === 'verified') {
+            setTimeout(() => {
+                toast.success('Email verified successfully! You can now login.');
+            }, 100);
+            window.history.replaceState({}, '', '/login');
+        } else if (status === 'invalid-token' || status === 'already-verified') {
+            setTimeout(() => {
+                const message =
+                    status === 'invalid-token'
+                        ? 'Verification link is invalid or has expired. Please request a new one.'
+                        : 'This email is already verified. Please login.';
+                toast.error(message);
+            }, 100);
+            window.history.replaceState({}, '', '/login');
         }
     }, []);
 

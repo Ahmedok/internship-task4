@@ -48,6 +48,29 @@ export default function UserTable() {
 
     const currentUserName = localStorage.getItem('userName');
 
+    // Check if user was just redirected from email verification
+    useEffect(() => {
+        // Check URL for status from backend
+        const params = new URLSearchParams(window.location.search);
+        const status = params.get('status');
+
+        if (status === 'verified') {
+            setTimeout(() => {
+                toast.success('Email verified successfully! Welcome to AdminPanel.');
+            }, 100);
+            window.history.replaceState({}, '', '/');
+        } else if (status === 'invalid-token' || status === 'already-verified') {
+            setTimeout(() => {
+                const message =
+                    status === 'invalid-token'
+                        ? 'Verification link is invalid or has expired.'
+                        : 'This email is already verified.';
+                toast.error(message);
+            }, 100);
+            window.history.replaceState({}, '', '/');
+        }
+    }, []);
+
     // Filter users based on search text
     const filteredUsers = users.filter((user) => {
         if (!filterText) return true;

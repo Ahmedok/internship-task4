@@ -72,18 +72,29 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 // Email verification
 export const verifyEmail = async (req: Request, res: Response): Promise<void> => {
     const { token } = req.params;
+    console.log('[VERIFY] Verification attempt with token:', token);
 
     if (!token || typeof token !== 'string') {
-        res.status(400).send('Invalid token format');
+        console.log('[VERIFY] Token format invalid!');
+        res.redirect('/?status=invalid-token');
         return;
     }
 
     try {
-        // User search
+        // User search by token
         const user = await prisma.user.findFirst({ where: { verificationToken: token } });
 
+        // User existence check
         if (!user) {
-            res.status(400).send('Invalid token');
+            console.log('[VERIFY] User mismatch for token!');
+            res.redirect('/?status=invalid-token');
+            return;
+        }
+
+        // Check if already verified
+        if (user.status === 'ACTIVE' && !user.verificationToken) {
+            console.log(`[VERIFY] User ${user.id} is already verified!`);
+            res.redirect('/?status=already-verified');
             return;
         }
 
@@ -96,10 +107,12 @@ export const verifyEmail = async (req: Request, res: Response): Promise<void> =>
             },
         });
 
-        // Redirect to front
-        res.redirect('/');
+        // Success - redirect to front
+        console.log('[VERIFY] Email successfully verified:', user.id);
+        res.redirect('/?status=verified');
     } catch (error) {
-        res.status(500).send('Verification failed');
+        console.error('[VERIFY] FATAL ERROR:', error);
+        res.redirect('/?status=invalid-token');
     }
 };
 
