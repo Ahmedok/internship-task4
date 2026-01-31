@@ -119,9 +119,10 @@ export const verifyEmail = async (req: Request, res: Response): Promise<void> =>
 
 // Login
 export const login = async (req: Request, res: Response): Promise<void> => {
-    console.log('[LOGIN] Request recieved:', req.body);
+    console.log('[LOGIN] Request recieved!');
     try {
         const { email, password } = req.body;
+        console.log('[LOGIN] Request attempt for user:', email);
 
         const user = await prisma.user.findUnique({ where: { email } });
 
@@ -134,7 +135,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
         // Banned check
         if (user.status === 'BLOCKED') {
-            console.log('[LOGIN] User is banned!', user.id);
+            console.log('[LOGIN] User is banned! ID:', user.id);
             res.status(403).json({ message: 'You are blocked' });
             return;
         }
@@ -148,7 +149,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         }
 
         // Last login update
-        console.log('[LOGIN] Success! Updating the last login time', req.body);
+        console.log('[LOGIN] Success! Updating the last login time for user:', email);
         await prisma.user.update({
             where: { id: user.id },
             data: { lastLogin: new Date() },
