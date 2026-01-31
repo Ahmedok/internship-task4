@@ -12,12 +12,13 @@
 
 /* --- Mesh Gradient Background --- */
 body {
+    overflow: hidden !important;
+    min-height: 100vh;
     font-family:
         'Inter',
         system-ui,
         -apple-system,
         sans-serif;
-    min-height: 100vh;
 
     /* Complex gradient creating depth without being distracting */
     background-color: #e2e8f0;

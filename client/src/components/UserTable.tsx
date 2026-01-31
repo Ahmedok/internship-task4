@@ -13,6 +13,7 @@ import {
 } from 'react-icons/fa';
 import { FaShield, FaMagnifyingGlass, FaXmark } from 'react-icons/fa6';
 import { toast } from 'react-toastify';
+import TooltipWrapper from './TooltipWrapper';
 
 interface User {
     id: number;
@@ -208,39 +209,42 @@ export default function UserTable() {
                             role="group"
                             aria-label="User actions (left)"
                         >
-                            <button
-                                className="btn btn-danger py-3 py-md-2 d-flex align-items-center justify-content-center"
-                                onClick={() => void handleAction('block')}
-                                disabled={loading || selectedIds.length === 0}
-                                title="Block selected users"
-                                aria-label="Block selected users"
-                                style={{ minWidth: '60px' }}
-                            >
-                                <FaLock className="me-0 me-md-2" />{' '}
-                                <span className="d-none d-md-inline">Block</span>
-                            </button>
-                            <button
-                                className="btn btn-success py-3 py-md-2 d-flex align-items-center justify-content-center"
-                                onClick={() => void handleAction('unblock')}
-                                disabled={loading || selectedIds.length === 0}
-                                title="Unblock selected users"
-                                aria-label="Unblock selected users"
-                                style={{ minWidth: '60px' }}
-                            >
-                                <FaUnlock className="me-0 me-md-2" />{' '}
-                                <span className="d-none d-md-inline">Unblock</span>
-                            </button>
-                            <button
-                                className="btn btn-secondary py-3 py-md-2 d-flex align-items-center justify-content-center"
-                                onClick={() => void handleAction('delete')}
-                                disabled={loading || selectedIds.length === 0}
-                                title="Delete selected users"
-                                aria-label="Delete selected users"
-                                style={{ minWidth: '60px' }}
-                            >
-                                <FaTrash className="me-0 me-md-2" />{' '}
-                                <span className="d-none d-md-inline">Delete</span>
-                            </button>
+                            <TooltipWrapper text="Block selected users">
+                                <button
+                                    className="btn btn-danger py-3 py-md-2 d-flex align-items-center justify-content-center"
+                                    onClick={() => void handleAction('block')}
+                                    disabled={loading || selectedIds.length === 0}
+                                    aria-label="Block selected users"
+                                    style={{ minWidth: '60px' }}
+                                >
+                                    <FaLock className="me-0 me-md-2" />{' '}
+                                    <span className="d-none d-md-inline">Block</span>
+                                </button>
+                            </TooltipWrapper>
+                            <TooltipWrapper text="Unblock selected users">
+                                <button
+                                    className="btn btn-success py-3 py-md-2 d-flex align-items-center justify-content-center"
+                                    onClick={() => void handleAction('unblock')}
+                                    disabled={loading || selectedIds.length === 0}
+                                    aria-label="Unblock selected users"
+                                    style={{ minWidth: '60px' }}
+                                >
+                                    <FaUnlock className="me-0 me-md-2" />{' '}
+                                    <span className="d-none d-md-inline">Unblock</span>
+                                </button>
+                            </TooltipWrapper>
+                            <TooltipWrapper text="Delete selected users">
+                                <button
+                                    className="btn btn-secondary py-3 py-md-2 d-flex align-items-center justify-content-center"
+                                    onClick={() => void handleAction('delete')}
+                                    disabled={loading || selectedIds.length === 0}
+                                    aria-label="Delete selected users"
+                                    style={{ minWidth: '60px' }}
+                                >
+                                    <FaTrash className="me-0 me-md-2" />{' '}
+                                    <span className="d-none d-md-inline">Delete</span>
+                                </button>
+                            </TooltipWrapper>
                         </div>
 
                         {/* Toolbar right */}
@@ -251,41 +255,43 @@ export default function UserTable() {
                             style={{ maxWidth: 'min(300px, 100%)' }}
                         >
                             {/* Remove unverified */}
-                            <button
-                                className="btn btn-outline-warning text-dark border-warning py-3 py-md-2 d-flex align-items-center justify-content-center"
-                                onClick={() => void handleAction('delete-unverified')}
-                                disabled={loading}
-                                title="Remove all unverified users"
-                                aria-label="Remove all unverified users"
-                                style={{ minWidth: '60px' }}
-                            >
-                                <FaUserTimes className="me-0 me-md-2" />{' '}
-                                <span className="d-none d-md-inline fw-bold">
-                                    Remove Unverified
-                                </span>
-                            </button>
+                            <TooltipWrapper text="Remove all unverified users">
+                                <button
+                                    className="btn btn-outline-warning text-dark border-warning py-3 py-md-2 d-flex align-items-center justify-content-center"
+                                    onClick={() => void handleAction('delete-unverified')}
+                                    disabled={loading}
+                                    aria-label="Remove all unverified users"
+                                    style={{ minWidth: '60px' }}
+                                >
+                                    <FaUserTimes className="me-0 me-md-2" />{' '}
+                                    <span className="d-none d-md-inline fw-bold">
+                                        Remove Unverified
+                                    </span>
+                                </button>
+                            </TooltipWrapper>
 
                             {/* Refresh */}
-                            <button
-                                className="btn btn-light border py-3 py-md-2 d-flex align-items-center justify-content-center"
-                                onClick={() => {
-                                    setRefreshKey((k) => k + 1);
-                                }}
-                                disabled={loading}
-                                title="Refresh table"
-                                aria-label="Refresh user list"
-                                style={{ minWidth: '60px' }}
-                            >
-                                <FaSyncAlt
-                                    className={
-                                        loading
-                                            ? 'text-muted'
-                                            : refreshKey > 0
-                                              ? 'text-primary'
-                                              : 'text-muted'
-                                    }
-                                />
-                            </button>
+                            <TooltipWrapper text="Refresh table">
+                                <button
+                                    className="btn btn-light border py-3 py-md-2 d-flex align-items-center justify-content-center"
+                                    onClick={() => {
+                                        setRefreshKey((k) => k + 1);
+                                    }}
+                                    disabled={loading}
+                                    aria-label="Refresh user list"
+                                    style={{ minWidth: '60px' }}
+                                >
+                                    <FaSyncAlt
+                                        className={
+                                            loading
+                                                ? 'text-muted'
+                                                : refreshKey > 0
+                                                  ? 'text-primary'
+                                                  : 'text-muted'
+                                        }
+                                    />
+                                </button>
+                            </TooltipWrapper>
                         </div>
                     </div>
                     {/* Search and statistics */}
@@ -368,7 +374,7 @@ export default function UserTable() {
                                     <th
                                         scope="col"
                                         className="text-nowrap"
-                                        style={{ minWidth: '100px' }}
+                                        style={{ maxWidth: '250px' }}
                                     >
                                         User Info
                                     </th>
@@ -415,18 +421,27 @@ export default function UserTable() {
                                         </td>
 
                                         {/* Name + Mail */}
-                                        <td>
-                                            <div
-                                                className="text-truncate fw-bold text-dark"
-                                                title={user.name}
-                                            >
-                                                {user.name}
-                                            </div>
-                                            <div
-                                                className="text-truncate small text-muted"
-                                                title={user.email}
-                                            >
-                                                {user.email}
+                                        <td style={{ maxWidth: '250px' }}>
+                                            <div className="d-flex flex-column align-items-start">
+                                                <TooltipWrapper text={user.name}>
+                                                    <div
+                                                        className="d-inline-block text-truncate fw-bold text-dark"
+                                                        style={{ maxWidth: '100%' }}
+                                                    >
+                                                        {user.name}
+                                                    </div>
+                                                </TooltipWrapper>
+                                                <TooltipWrapper
+                                                    placement="bottom"
+                                                    text={user.email}
+                                                >
+                                                    <div
+                                                        className="d-inline-block text-truncate small text-muted"
+                                                        style={{ maxWidth: '100%' }}
+                                                    >
+                                                        {user.email}
+                                                    </div>
+                                                </TooltipWrapper>
                                             </div>
                                         </td>
 
