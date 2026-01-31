@@ -43,8 +43,21 @@ export default function UserTable() {
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [refreshKey, setRefreshKey] = useState<number>(0);
+    const [filterText, setFilterText] = useState<string>('');
 
     const currentUserName = localStorage.getItem('userName');
+
+    // Filter users based on search text
+    const filteredUsers = users.filter((user) => {
+        if (!filterText) return true;
+        const search = filterText.toLowerCase();
+        return (
+            user.name.toLowerCase().includes(search) ||
+            user.email.toLowerCase().includes(search) ||
+            user.status.toLowerCase().includes(search) ||
+            user.id.toString().includes(search)
+        );
+    });
 
     useEffect(() => {
         const loadUsers = async () => {
@@ -73,7 +86,7 @@ export default function UserTable() {
     // Checkbox logic
     const toggleSelectAll = (e: ChangeEvent<HTMLInputElement>): void => {
         if (e.target.checked) {
-            setSelectedIds(users.map((u) => u.id));
+            setSelectedIds(filteredUsers.map((u) => u.id));
         } else {
             setSelectedIds([]);
         }
@@ -157,10 +170,10 @@ export default function UserTable() {
     };
 
     return (
-        <div className="d-flex flex-column min-vh-100">
+        <div className="d-flex flex-column vh-100">
             {/* Navbar */}
             <nav
-                className="navbar navbar-expand-lg navbar-dark mb-4 py-3 py-md-2"
+                className="navbar navbar-expand-lg navbar-dark mb-4 py-3 py-md-2 flex-shrink-0"
                 style={{ background: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)' }}
             >
                 <div className="container">
@@ -169,7 +182,7 @@ export default function UserTable() {
                         <span className="fs-6 opacity-75 font-monospace">v1.1</span>
                     </div>
                     <div className="d-flex align-items-center text-white gap-3">
-                        <div className="d-none d-sm-block text-end">
+                        <div className="d-none d-md-block text-end">
                             <div className="fw-bold small">{currentUserName || 'User'}</div>
                             <div className="small opacity-75" style={{ fontSize: '0.75rem' }}>
                                 Administrator (just like everyone)
@@ -185,7 +198,7 @@ export default function UserTable() {
                 </div>
             </nav>
 
-            <div className="container flex-grow-1">
+            <div className="container flex-grow-1 d-flex flex-column">
                 {/* Toolbar */}
                 <div className="card shadow-sm border-0 mb-4 rounded-3">
                     <div className="card-body d-flex justify-content-between align-items-center flex-wrap gap-3">
@@ -203,8 +216,8 @@ export default function UserTable() {
                                 aria-label="Block selected users"
                                 style={{ minWidth: '60px' }}
                             >
-                                <FaLock className="me-0 me-sm-2" />{' '}
-                                <span className="d-none d-sm-inline">Block</span>
+                                <FaLock className="me-0 me-md-2" />{' '}
+                                <span className="d-none d-md-inline">Block</span>
                             </button>
                             <button
                                 className="btn btn-success py-3 py-md-2 d-flex align-items-center justify-content-center"
@@ -214,8 +227,8 @@ export default function UserTable() {
                                 aria-label="Unblock selected users"
                                 style={{ minWidth: '60px' }}
                             >
-                                <FaUnlock className="me-0 me-sm-2" />{' '}
-                                <span className="d-none d-sm-inline">Unblock</span>
+                                <FaUnlock className="me-0 me-md-2" />{' '}
+                                <span className="d-none d-md-inline">Unblock</span>
                             </button>
                             <button
                                 className="btn btn-secondary py-3 py-md-2 d-flex align-items-center justify-content-center"
@@ -225,16 +238,17 @@ export default function UserTable() {
                                 aria-label="Delete selected users"
                                 style={{ minWidth: '60px' }}
                             >
-                                <FaTrash className="me-0 me-sm-2" />{' '}
-                                <span className="d-none d-sm-inline">Delete</span>
+                                <FaTrash className="me-0 me-md-2" />{' '}
+                                <span className="d-none d-md-inline">Delete</span>
                             </button>
                         </div>
 
                         {/* Toolbar right */}
                         <div
-                            className="d-flex justify-content-end gap-2 gap-md-4"
+                            className="d-flex flex-grow-1 justify-content-end justify-content-md-between gap-2"
                             role="group"
                             aria-label="User actions (right)"
+                            style={{ maxWidth: 'min(300px, 100%)' }}
                         >
                             {/* Remove unverified */}
                             <button
@@ -274,23 +288,58 @@ export default function UserTable() {
                             </button>
                         </div>
                     </div>
-                    {/* Selection statistics */}
+                    {/* Search and statistics */}
                     <div className="card-footer bg-white border-top-0 pt-0 pb-3">
-                        <small className="text-muted">
-                            Selected:{' '}
-                            <span className="fw-bold text-dark">{selectedIds.length}</span> / Total:{' '}
-                            <span className="fw-bold text-dark">{users.length}</span>
-                        </small>
+                        <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                            <small className="text-muted">
+                                Selected:{' '}
+                                <span className="fw-bold text-dark">{selectedIds.length}</span>
+                                {filterText && (
+                                    <>
+                                        {' '}
+                                        / Filtered:{' '}
+                                        <span className="fw-bold text-dark">
+                                            {filteredUsers.length}
+                                        </span>
+                                    </>
+                                )}{' '}
+                                / Total: <span className="fw-bold text-dark">{users.length}</span>
+                            </small>
+                            <div className="w-100 ms-md-auto" style={{ maxWidth: '300px' }}>
+                                <div className="input-group input-group-sm">
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        placeholder="Search by name, email, status, or ID..."
+                                        value={filterText}
+                                        onChange={(e) => {
+                                            setFilterText(e.target.value);
+                                        }}
+                                        disabled={loading}
+                                        aria-label="Filter users"
+                                    />
+                                    {filterText && (
+                                        <button
+                                            className="btn btn-outline-secondary"
+                                            type="button"
+                                            onClick={() => {
+                                                setFilterText('');
+                                            }}
+                                            aria-label="Clear filter"
+                                        >
+                                            ×
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 {/* User table (Responsive) */}
-                <div className="card shadow-sm border-0 rounded-3 overflow-hidden">
-                    <div className="table-responsive">
-                        <table
-                            className="table table-hover align-middle mb-0"
-                            style={{ maxHeight: '70vh', overflowY: 'auto' }}
-                        >
+                <div className="card shadow-sm border-0 rounded-3 flex-grow-1 overflow-hidden">
+                    <div className="table-responsive" style={{ height: '100%', overflowY: 'auto' }}>
+                        <table className="table table-hover align-middle mb-0">
                             <thead
                                 className="table-light sticky-top text-secondary text-uppercase small"
                                 style={{ letterSpacing: '0.5px' }}
@@ -302,8 +351,8 @@ export default function UserTable() {
                                             className="form-check-input border-secondary"
                                             onChange={toggleSelectAll}
                                             checked={
-                                                users.length > 0 &&
-                                                selectedIds.length === users.length
+                                                filteredUsers.length > 0 &&
+                                                selectedIds.length === filteredUsers.length
                                             }
                                             disabled={loading}
                                             style={{ cursor: 'pointer' }}
@@ -320,7 +369,7 @@ export default function UserTable() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {users.map((user) => (
+                                {filteredUsers.map((user) => (
                                     <tr
                                         key={user.id}
                                         className={`align-items-middle ${user.status === 'BLOCKED' ? 'table-danger' : ''}`}
@@ -395,6 +444,27 @@ export default function UserTable() {
                                                 <FaBug />
                                             </div>
                                             No users found
+                                        </td>
+                                    </tr>
+                                )}
+                                {!loading && users.length > 0 && filteredUsers.length === 0 && (
+                                    <tr>
+                                        <td
+                                            colSpan={6}
+                                            className="text-center py-5 text-muted bg-light"
+                                        >
+                                            <div className="fs-4 mb-2">🔍</div>
+                                            No users match your search
+                                            <div className="mt-2">
+                                                <button
+                                                    className="btn btn-sm btn-outline-primary"
+                                                    onClick={() => {
+                                                        setFilterText('');
+                                                    }}
+                                                >
+                                                    Clear filter
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 )}
