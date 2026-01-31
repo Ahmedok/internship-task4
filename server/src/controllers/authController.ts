@@ -97,7 +97,7 @@ export const verifyEmail = async (req: Request, res: Response): Promise<void> =>
         });
 
         // Redirect to front
-        res.redirect('http://localhost:5173/');
+        res.redirect('/');
     } catch (error) {
         res.status(500).send('Verification failed');
     }
