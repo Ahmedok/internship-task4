@@ -9,9 +9,10 @@ const SECRET_KEY = process.env.JWT_SECRET || 'secret_key_fallback';
 
 // Registration
 export const register = async (req: Request, res: Response): Promise<void> => {
-    console.log('[REG] Request recieved:', req.body);
+    console.log('[REG] Request recieved!');
     try {
         const { name, email, password } = req.body;
+        console.log(`[REG] Trying to register: Name ${name}, Mail ${email}`);
 
         if (!email || !password) {
             console.log('[REG] Missing fields');
@@ -23,7 +24,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
         console.log('[REG] Checking existing user...');
         const existingUser = await prisma.user.findUnique({ where: { email } });
         if (existingUser) {
-            console.log('[REG] User already exists');
+            console.log(`[REG] User with ${email} already exists!`);
             res.status(400).json({ message: 'User already exists' });
             return;
         }
@@ -53,7 +54,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
         sendVerificationEmail(email, verificationToken);
 
         // Token
-        console.log('[REG] Success! User ID:', user.id);
+        console.log('[REG] Success! Assigned user ID:', user.id);
         const token = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, {
             expiresIn: '24h',
         });
@@ -108,7 +109,7 @@ export const verifyEmail = async (req: Request, res: Response): Promise<void> =>
         });
 
         // Success - redirect to front
-        console.log('[VERIFY] Email successfully verified:', user.id);
+        console.log('[VERIFY] Email successfully verified for ID:', user.id);
         res.redirect('/?status=verified');
     } catch (error) {
         console.error('[VERIFY] FATAL ERROR:', error);
