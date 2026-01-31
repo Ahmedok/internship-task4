@@ -66,7 +66,7 @@ export default function AuthPage() {
 
                 setTimeout(() => {
                     window.location.href = '/';
-                }, 500);
+                }, 1000);
             } else {
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('userName', data.user.name);

@@ -160,14 +160,14 @@ export default function UserTable() {
         <div className="d-flex flex-column min-vh-100">
             {/* Navbar */}
             <nav
-                className="navbar navbar-expand-lg navbar-dark mb-4"
+                className="navbar navbar-expand-lg navbar-dark mb-4 py-3 py-md-2"
                 style={{ background: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)' }}
             >
                 <div className="container">
-                    <span className="navbar-brand fw-bold fs-4">
-                        <FaShield /> AdminPanel{' '}
-                        <span className="fs-6 opacity-75 font-monospace">v1.0</span>
-                    </span>
+                    <div className="navbar-brand d-inline-flex align-items-baseline gap-1">
+                        <FaShield /> <span className="fw-bold fs-4">AdminPanel</span>{' '}
+                        <span className="fs-6 opacity-75 font-monospace">v1.1</span>
+                    </div>
                     <div className="d-flex align-items-center text-white gap-3">
                         <div className="d-none d-sm-block text-end">
                             <div className="fw-bold small">{currentUserName || 'User'}</div>
@@ -176,7 +176,7 @@ export default function UserTable() {
                             </div>
                         </div>
                         <button
-                            className="btn btn-light btn-sm text-primary fw-bold shadow-sm"
+                            className="btn btn-light text-primary fw-bold shadow-sm py-2 py-md-1 px-3 px-md-2"
                             onClick={logout}
                         >
                             <FaSignOutAlt className="me-1" /> Logout
@@ -196,52 +196,56 @@ export default function UserTable() {
                             aria-label="User actions (left)"
                         >
                             <button
-                                className="btn btn-danger"
+                                className="btn btn-danger py-3 py-md-2 d-flex align-items-center justify-content-center"
                                 onClick={() => void handleAction('block')}
                                 disabled={loading || selectedIds.length === 0}
                                 title="Block selected users"
                                 aria-label="Block selected users"
+                                style={{ minWidth: '60px' }}
                             >
-                                <FaLock className="me-2" />{' '}
+                                <FaLock className="me-0 me-sm-2" />{' '}
                                 <span className="d-none d-sm-inline">Block</span>
                             </button>
                             <button
-                                className="btn btn-success"
+                                className="btn btn-success py-3 py-md-2 d-flex align-items-center justify-content-center"
                                 onClick={() => void handleAction('unblock')}
                                 disabled={loading || selectedIds.length === 0}
                                 title="Unblock selected users"
                                 aria-label="Unblock selected users"
+                                style={{ minWidth: '60px' }}
                             >
-                                <FaUnlock className="me-2" />{' '}
+                                <FaUnlock className="me-0 me-sm-2" />{' '}
                                 <span className="d-none d-sm-inline">Unblock</span>
                             </button>
                             <button
-                                className="btn btn-secondary"
+                                className="btn btn-secondary py-3 py-md-2 d-flex align-items-center justify-content-center"
                                 onClick={() => void handleAction('delete')}
                                 disabled={loading || selectedIds.length === 0}
                                 title="Delete selected users"
                                 aria-label="Delete selected users"
+                                style={{ minWidth: '60px' }}
                             >
-                                <FaTrash className="me-2" />{' '}
+                                <FaTrash className="me-0 me-sm-2" />{' '}
                                 <span className="d-none d-sm-inline">Delete</span>
                             </button>
                         </div>
 
                         {/* Toolbar right */}
                         <div
-                            className="btn-group d-flex gap-2"
+                            className="d-flex justify-content-end gap-2 gap-md-4"
                             role="group"
                             aria-label="User actions (right)"
                         >
                             {/* Remove unverified */}
                             <button
-                                className="btn btn-outline-warning text-dark border-warning"
+                                className="btn btn-outline-warning text-dark border-warning py-3 py-md-2 d-flex align-items-center justify-content-center"
                                 onClick={() => void handleAction('delete-unverified')}
                                 disabled={loading}
                                 title="Remove all unverified users"
                                 aria-label="Remove all unverified users"
+                                style={{ minWidth: '60px' }}
                             >
-                                <FaUserTimes className="me-2" />{' '}
+                                <FaUserTimes className="me-0 me-md-2" />{' '}
                                 <span className="d-none d-md-inline fw-bold">
                                     Remove Unverified
                                 </span>
@@ -249,13 +253,14 @@ export default function UserTable() {
 
                             {/* Refresh */}
                             <button
-                                className="btn btn-light border"
+                                className="btn btn-light border py-3 py-md-2 d-flex align-items-center justify-content-center"
                                 onClick={() => {
                                     setRefreshKey((k) => k + 1);
                                 }}
                                 disabled={loading}
                                 title="Refresh table"
                                 aria-label="Refresh user list"
+                                style={{ minWidth: '60px' }}
                             >
                                 <FaSyncAlt
                                     className={
@@ -282,9 +287,12 @@ export default function UserTable() {
                 {/* User table (Responsive) */}
                 <div className="card shadow-sm border-0 rounded-3 overflow-hidden">
                     <div className="table-responsive">
-                        <table className="table table-hover align-middle mb-0">
+                        <table
+                            className="table table-hover align-middle mb-0"
+                            style={{ maxHeight: '70vh', overflowY: 'auto' }}
+                        >
                             <thead
-                                className="table-light text-secondary text-uppercase small"
+                                className="table-light sticky-top text-secondary text-uppercase small"
                                 style={{ letterSpacing: '0.5px' }}
                             >
                                 <tr className="align-items-middle">
