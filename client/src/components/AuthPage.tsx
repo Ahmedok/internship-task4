@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { AxiosError } from 'axios';
 import api from '../api';
 import { toast } from 'react-toastify';
@@ -30,6 +30,21 @@ export default function AuthPage() {
     const [isLogin, setIsLogin] = useState(true);
     const [formData, setFormData] = useState<FormData>({ name: '', email: '', password: '' });
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const wasBlocked = sessionStorage.getItem('userBlocked');
+
+        if (wasBlocked === 'true') {
+            // Delay to ensure the container is ready
+            setTimeout(() => {
+                toast.error(
+                    'The account has been blocked or your session expired. Please login again.',
+                );
+            }, 100);
+
+            sessionStorage.removeItem('userBlocked');
+        }
+    }, []);
 
     const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();

@@ -23,6 +23,7 @@ api.interceptors.response.use(
         // If user is no longer with us...
         if (error.response && (error.response.status === 401 || error.response.status === 403)) {
             localStorage.clear();
+            sessionStorage.setItem('userBlocked', 'true');
             window.location.href = '/login';
         }
         return Promise.reject(error);
