@@ -20,6 +20,7 @@ export const authenticateToken = async (
     const token = authHeader && authHeader.split(' ')[1];
 
     if (!token) {
+        console.error('[AUTH-M] No-token request was intercepted!');
         res.status(401).json({ message: 'Access token required' });
         return;
     }
@@ -32,22 +33,26 @@ export const authenticateToken = async (
         const user = await prisma.user.findUnique({
             where: { id: decoded.id },
         });
+        console.error(`[AUTH-M] Checking user [${user}] for request access...`);
 
         if (!user) {
+            console.error(`[AUTH-M] Non-existing user [${user}] was intercepted!`);
             res.status(401).json({ message: 'User not found' });
             return;
         }
 
         if (user.status === 'BLOCKED') {
+            console.error(`[AUTH-M] Blocked user [${user}] was intercepted!`);
             res.status(403).json({ message: 'User is blocked' });
             return;
         }
 
         // Success passage
+        console.error(`[AUTH-M] User [${user}] checked successfully. Request granted!`);
         (req as AuthRequest).user = { id: user.id, email: user.email };
         next();
     } catch (error) {
-        console.error('Auth Error:', error);
+        console.error('[AUTH-M] FATAL ERROR:', error);
         res.status(403).json({ message: 'Invalid or expired token' });
         return;
     }
