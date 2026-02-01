@@ -31,9 +31,9 @@ export const sendVerificationEmail = async (email: string, token: string) => {
                 </div>
     `,
         });
-        console.log(`Verification email sent to ${email} from ${appUrl}`);
-        console.log(`For dev purposes, this is the link: ${verificationLink}`);
+        console.log(`[MAILER] Verification email sent to ${email} from ${appUrl}`);
+        console.log(`[MAILER] For dev purposes, this is the link: ${verificationLink}`);
     } catch (error) {
-        console.error('Email sending failed (probably spam filter)', error);
+        console.error('[MAILER] Email sending failed (probably spam filter)', error);
     }
 };
