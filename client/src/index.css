@@ -1,19 +1,11 @@
-:root {
-    /* --- Color Palette (Slate / Corporate) --- */
-    --bs-primary: #334155; /* Slate 700 - main corporate color */
-    --bs-primary-rgb: 51, 65, 85;
-
-    --bs-success: #10b981; /* Emerald 500 - soft success */
-    --bs-danger: #f43f5e; /* Rose 500 - soft error */
-    --bs-warning: #f59e0b; /* Amber 500 - warning */
-
-    --bs-body-bg: #f1f5f9; /* Slate 100 - base background */
-}
-
-/* --- Mesh Gradient Background --- */
+/* --- Reset with Gradient Background --- */
+html,
 body {
-    overflow: hidden !important;
-    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    overscroll-behavior: none;
+
     font-family:
         'Inter',
         system-ui,
@@ -27,6 +19,18 @@ body {
         radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.1) 0px, transparent 50%),
         radial-gradient(at 100% 100%, rgba(244, 63, 94, 0.05) 0px, transparent 50%);
     background-attachment: fixed; /* Background stays fixed on scroll */
+}
+
+:root {
+    /* --- Color Palette (Slate / Corporate) --- */
+    --bs-primary: #334155; /* Slate 700 - main corporate color */
+    --bs-primary-rgb: 51, 65, 85;
+
+    --bs-success: #10b981; /* Emerald 500 - soft success */
+    --bs-danger: #f43f5e; /* Rose 500 - soft error */
+    --bs-warning: #f59e0b; /* Amber 500 - warning */
+
+    --bs-body-bg: #f1f5f9; /* Slate 100 - base background */
 }
 
 /* --- UI Polish --- */
@@ -59,6 +63,7 @@ body {
 .table th {
     padding-top: 1rem;
     padding-bottom: 1rem;
+    background-clip: padding-box;
 }
 
 /* Table hover effect */

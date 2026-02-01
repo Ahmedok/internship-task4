@@ -46,7 +46,7 @@ export default function UserTable() {
     const [refreshKey, setRefreshKey] = useState<number>(0);
     const [filterText, setFilterText] = useState<string>('');
 
-    const currentUserName = localStorage.getItem('userName');
+    const currentUserName: string = localStorage.getItem('userName') || 'User';
 
     // Check if user was just redirected from email verification
     useEffect(() => {
@@ -194,37 +194,53 @@ export default function UserTable() {
     };
 
     return (
-        <div className="d-flex flex-column vh-100">
+        <div className="d-flex flex-column overflow-hidden" style={{ height: '100dvh' }}>
             {/* Navbar */}
             <nav
-                className="navbar navbar-expand-lg navbar-dark mb-4 py-3 py-md-2 flex-shrink-0"
+                className="navbar navbar-expand-lg navbar-dark py-3 py-md-2 flex-shrink-0"
                 style={{ background: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)' }}
             >
                 <div className="container">
                     <div className="navbar-brand d-inline-flex align-items-baseline gap-1">
-                        <FaShield /> <span className="fw-bold fs-4">AdminPanel</span>{' '}
+                        <FaShield />{' '}
+                        <span className="d-none d-sm-block fw-bold fs-4">AdminPanel</span>
+                        <span className="d-block d-sm-none fw-bold fs-4">AP</span>{' '}
                         <span className="fs-6 opacity-75 font-monospace">v1.1</span>
                     </div>
                     <div className="d-flex align-items-center text-white gap-3">
-                        <div className="d-none d-md-block text-end">
-                            <div className="fw-bold small">{currentUserName || 'User'}</div>
-                            <div className="small opacity-75" style={{ fontSize: '0.75rem' }}>
-                                Administrator (just like everyone)
+                        <div className="flex-shrink-1 text-end d-flex flex-column justify-content-center">
+                            <TooltipWrapper text={currentUserName} placement="bottom">
+                                <div
+                                    className="d-inline-block fw-bold small text-truncate"
+                                    style={{ maxWidth: 'clamp(80px, 20vw, 150px)' }}
+                                >
+                                    {currentUserName}
+                                </div>
+                            </TooltipWrapper>
+                            <div
+                                className="d-none d-md-block small opacity-75"
+                                style={{ fontSize: '0.75rem' }}
+                            >
+                                Administrator
                             </div>
                         </div>
                         <button
-                            className="btn btn-light text-primary fw-bold shadow-sm py-2 py-md-1 px-3 px-md-2"
+                            className="btn btn-light text-primary fw-bold shadow-sm py-3 py-md-2 px-3 px-md-2 d-flex align-items-center justify-content-center gap-2"
                             onClick={logout}
                         >
-                            <FaSignOutAlt className="me-1" /> Logout
+                            <FaSignOutAlt />
+                            <span className="d-none d-md-inline">Logout</span>
                         </button>
                     </div>
                 </div>
             </nav>
 
-            <div className="container flex-grow-1 d-flex flex-column">
+            <div
+                className="container mt-4 flex-grow-1 d-flex flex-column gap-3"
+                style={{ minHeight: 0 }}
+            >
                 {/* Toolbar */}
-                <div className="card shadow-sm border-0 mb-4 rounded-3">
+                <div className="card shadow-sm border-0 rounded-3 flex-shrink-0">
                     <div className="card-body d-flex justify-content-between align-items-center flex-wrap gap-3">
                         {/* Action group */}
                         <div
@@ -370,7 +386,7 @@ export default function UserTable() {
 
                 {/* User table (Responsive) */}
                 <div className="card shadow-sm border-0 rounded-3 flex-grow-1 overflow-hidden">
-                    <div className="table-responsive" style={{ height: '100%', overflowY: 'auto' }}>
+                    <div className="table-responsive overflow-auto h-100">
                         <table className="table table-hover align-middle mb-0">
                             <thead
                                 className="table-light sticky-top text-secondary text-uppercase small"
@@ -546,7 +562,7 @@ export default function UserTable() {
                     </div>
                 </div>
 
-                <div className="text-center mt-4 mb-5 text-muted small opacity-50">
+                <div className="text-center text-muted mb-3 small opacity-50 flex-shrink-0">
                     Developed by Ahmedok (Assylzhan Sarinov) • {new Date().getFullYear()}
                 </div>
             </div>
