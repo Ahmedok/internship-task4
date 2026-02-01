@@ -10,35 +10,25 @@ const SECRET_KEY = process.env.JWT_SECRET || 'secret_key_fallback';
 // Registration
 export const register = async (req: Request, res: Response): Promise<void> => {
     console.log('[REG] Request recieved!');
+
+    // Field validation
+    const { name, email, password } = req.body;
+    if (!email || !password) {
+        console.log('[REG] Incorrect data input!');
+        res.status(400).json({ message: 'Email and password required' });
+        return;
+    }
+
+    // Registration attempt
+    console.log(`[REG] Trying to register user with name [${name}] and email [${email}]...`);
     try {
-        const { name, email, password } = req.body;
-        console.log(`[REG] Trying to register: Name ${name}, Mail ${email}`);
-
-        if (!email || !password) {
-            console.log('[REG] Missing fields');
-            res.status(400).json({ message: 'Email and password required' });
-            return;
-        }
-
-        // Unique check
-        console.log('[REG] Checking existing user...');
-        const existingUser = await prisma.user.findUnique({ where: { email } });
-        if (existingUser) {
-            console.log(`[REG] User with ${email} already exists!`);
-            res.status(400).json({ message: 'User already exists' });
-            return;
-        }
-
-        // Pass hash
-        console.log('[REG] Hashing password...');
+        // Hashes prep
+        console.log('[REG] Hashing password and verification token...');
         const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Email token
-        console.log('[REG] Generating verification token...');
         const verificationToken = crypto.randomBytes(32).toString('hex');
 
-        // BD insertion
-        console.log('[REG] Creating user in DB...');
+        // Creation attempt (should either pass or give P2002)
+        console.log('[REG] Attempting to create user in DB...');
         const user = await prisma.user.create({
             data: {
                 name: name || 'Anonymous',
@@ -49,22 +39,28 @@ export const register = async (req: Request, res: Response): Promise<void> => {
             },
         });
 
-        // Email send
-        console.log('[REG] Verification letter sent to:', email);
+        // Success
+        console.log(`[REG] User [${email}] created successfully! Sending verification email...`);
+
         sendVerificationEmail(email, verificationToken);
 
-        // Token
-        console.log('[REG] Success! Assigned user ID:', user.id);
         const token = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, {
             expiresIn: '24h',
         });
 
-        res.json({
+        res.status(201).json({
             token,
             user: { id: user.id, name: user.name, email: user.email, status: user.status },
             message: 'Registered! Please check the mail!',
         });
-    } catch (error) {
+    } catch (error: any) {
+        // Database unique check error
+        if (error.code === 'P2002') {
+            console.log(`[REG] DB-FAIL: User with ${email} already exists!`);
+            res.status(409).json({ message: 'User already exists' });
+            return;
+        }
+        // Other errors
         console.error('[REG] FATAL ERROR:', error);
         res.status(500).json({ message: 'Registration failed' });
     }
